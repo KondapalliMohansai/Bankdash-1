@@ -1,26 +1,17 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import {
-  LayoutDashboard,
-  ArrowLeftRight,
-  WalletCards,
-  TrendingUp,
-  CreditCard,
-  Landmark,
-  Settings,
-  Wrench,
-  X,
-} from "lucide-react";
+import {Home,ArrowDownUp,WalletCards,TrendingUp,CreditCard,HandCoins,Wrench,ShieldCheck,Settings,Menu,X,} from "lucide-react";
 
 const menuItems = [
   {
     name: "Dashboard",
     path: "/",
-    icon: LayoutDashboard,
+    icon: Home,
   },
   {
     name: "Transactions",
     path: "/transactions",
-    icon: ArrowLeftRight,
+    icon: ArrowDownUp,
   },
   {
     name: "Accounts",
@@ -40,7 +31,7 @@ const menuItems = [
   {
     name: "Loans",
     path: "/loans",
-    icon: Landmark,
+    icon: HandCoins,
   },
   {
     name: "Services",
@@ -48,46 +39,72 @@ const menuItems = [
     icon: Wrench,
   },
   {
+    name: "My Privileges",
+    path: "/privileges",
+    icon: ShieldCheck,
+  },
+  {
     name: "Settings",
     path: "/settings",
     icon: Settings,
+  
   },
 ];
 
-function Sidebar({ open, setOpen }) {
+export default function Sidebar() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
     <>
-      {open && (
+      {/* Mobile Header */}
+      <div className="fixed left-0 right-0 top-0 z-50 flex h-[70px] items-center justify-between bg-white px-5 shadow-sm lg:hidden">
+        <div className="flex items-center">
+          <div className="mr-2 flex h-7 w-7 items-center justify-center rounded-lg border-2 border-[#3434E8]">
+            <div className="h-2 w-3 border-b-2 border-[#3434E8]" />
+          </div>
+
+          <h1 className="text-lg font-bold text-[#29334F]">
+            Bank
+            <span className="text-[#3434E8]">Dash.</span>
+          </h1>
+
+        </div>
+        <button
+          type="button"
+          onClick={() => setMobileOpen((prev) => !prev)}
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          className="rounded-lg p-2 text-[#3434E8] transition hover:bg-[#F7F8FF]">
+          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Mobile Overlay */}
+      {mobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
-          onClick={() => setOpen(false)}
+          onClick={() => setMobileOpen(false)}
+          className="fixed inset-0 z-40 bg-black/30 lg:hidden"
         />
       )}
 
+      {/* Sidebar */}
       <aside
-        className={`
-          fixed left-0 top-0 z-50
-          flex h-screen w-64 flex-col
-          bg-white border-r border-slate-200
-          transition-transform duration-300
-          lg:translate-x-0
-          ${open ? "translate-x-0" : "-translate-x-full"}
-        `}
-      >
-        <div className="flex h-20 items-center justify-between px-6">
-          <h1 className="text-2xl font-bold text-[#1f3c88]">
-            Bank<span className="text-[#35b6a4]">Dash.</span>
-          </h1>
+        className={`fixed left-0 top-0 z-40 h-screen w-[240px] overflow-y-auto bg-white transition-transform duration-300 ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0`}>
+        {/* Logo */}
+        <div className="flex h-[90px] items-center px-8">
+          <div className="mr-2 flex h-7 w-7 items-center justify-center rounded-lg border-2 border-[#3434E8]">
+            <div className="h-2 w-3 border-b-2 border-[#3434E8]" />
+          </div>
 
-          <button
-            className="lg:hidden"
-            onClick={() => setOpen(false)}
-          >
-            <X size={22} />
-          </button>
+          <h1 className="text-xl font-bold text-[#29334F]">
+            Bank
+            <span className="text-[#3434E8]">Dash.</span>
+          </h1>
         </div>
 
-        <nav className="flex-1 px-4 py-4">
+        {/* Navigation */}
+        <nav className="mt-3 pb-6">
           {menuItems.map((item) => {
             const Icon = item.icon;
 
@@ -95,43 +112,30 @@ function Sidebar({ open, setOpen }) {
               <NavLink
                 key={item.name}
                 to={item.path}
-                end={item.path === "/"}
-                onClick={() => setOpen(false)}
+                onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
-                  `
-                  mb-2 flex items-center gap-4 rounded-xl px-4 py-3
-                  text-sm font-medium transition
-                  ${
+                  `relative flex h-[55px] items-center gap-4 px-8 text-sm transition ${
                     isActive
-                      ? "bg-[#eaf4ff] text-[#1f3c88]"
-                      : "text-slate-500 hover:bg-slate-50"
-                  }
-                  `
-                }
-              >
-                <Icon size={20} />
-                {item.name}
+                      ? "font-medium text-[#3434E8]"
+                      : "text-[#9DA3AF] hover:bg-[#F7F8FF] hover:text-[#3434E8]"}`}>
+                {({ isActive }) => (
+                  <>
+                    {isActive && (
+                      <span className="absolute left-0 top-0 h-full w-1 rounded-r-full bg-[#3434E8]" />
+                    )}
+
+                    <Icon
+                      size={20}
+                      strokeWidth={isActive ? 2.4 : 1.8}
+                    />
+                    <span>{item.name}</span>
+                  </>
+                )}
               </NavLink>
             );
           })}
         </nav>
-
-        <div className="m-4 rounded-2xl bg-[#f4f7fc] p-4">
-          <p className="text-xs text-slate-500">
-            Need help?
-          </p>
-
-          <p className="mt-1 text-sm font-semibold">
-            Contact support
-          </p>
-
-          <button className="mt-3 w-full rounded-lg bg-[#1f3c88] py-2 text-sm text-white">
-            Get Help
-          </button>
-        </div>
       </aside>
     </>
   );
 }
-
-export default Sidebar;
