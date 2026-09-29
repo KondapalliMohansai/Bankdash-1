@@ -8,7 +8,7 @@ import Accounts from "./Pages/Accounts";
 import Investments from "./Pages/Investments";
 import CreditCards from "./Pages/CreditCards";
 import Loans from "./Pages/Loans";
-import Services from "./Pages/Services";
+import Services from "./Pages/Services.jsx";
 import Privileges from "./Pages/Privileges";
 import Settings from "./Pages/Settings";
 import EditProfile from "./Pages/EditProfile";
